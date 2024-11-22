@@ -16,6 +16,15 @@ import androidx.compose.ui.unit.dp                  // Added
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.eventure.ui.theme.EventureTheme
 
+// Added
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.maps.android.compose.CameraPositionState
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.MapUiSettings
+import com.google.android.gms.maps.model.LatLng
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +41,11 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun HomePage(modifier: Modifier = Modifier) {
+    val portugalLatLng = LatLng(39.3999, -8.2245)
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(portugalLatLng, 6f)
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -46,6 +60,15 @@ fun HomePage(modifier: Modifier = Modifier) {
         Button(onClick = { /* Ação do botão */ }) {
             Text(text = "Começar pesquisa")
         }
+        Spacer(modifier = Modifier.height(16.dp))
+        GoogleMap(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(400.dp),
+            cameraPositionState = cameraPositionState,
+            properties = MapProperties(isMyLocationEnabled = false),
+            uiSettings = MapUiSettings(zoomControlsEnabled = true)
+        )
     }
 }
 
