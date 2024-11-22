@@ -1,4 +1,4 @@
-package com.example.eventure.theme
+package com.example.eventure.components
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

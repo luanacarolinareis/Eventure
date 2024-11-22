@@ -20,8 +20,10 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapUiSettings
 import com.google.android.gms.maps.model.LatLng
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
+@Preview(showBackground = true)
 fun HomePage(modifier: Modifier = Modifier) {
     val coimbraLatLng = LatLng(40.2056, -8.4196)
     val cameraPositionState = rememberCameraPositionState {

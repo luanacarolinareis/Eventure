@@ -11,29 +11,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.example.eventure.R
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.foundation.text.ClickableText
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.eventure.R
 import com.example.eventure.components.bebasNeueFont
+import androidx.compose.ui.unit.sp
 import com.example.eventure.components.PasswordField
 
 @Composable
 @Preview(showBackground = true)
-fun LoginPage(onLogin: (String, String) -> Unit = { _, _ -> },
-              onGoToRegister: () -> Unit = {},
-              onContinueAsGuest: () -> Unit = {}) {
-
+fun RegisterPage(onRegister: (String, String, String) -> Unit = { _, _, _ -> }) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
 
     var passwordVisible by remember { mutableStateOf(false) }
+    var confirmPasswordVisible by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -57,7 +52,7 @@ fun LoginPage(onLogin: (String, String) -> Unit = { _, _ -> },
             Spacer(modifier = Modifier.height(5.dp))
 
             Text(
-                text = "Maps for events!",
+                text = "Register for Eventure!",
                 style = TextStyle(
                     fontFamily = bebasNeueFont,
                     fontSize = 25.sp
@@ -67,7 +62,23 @@ fun LoginPage(onLogin: (String, String) -> Unit = { _, _ -> },
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            // Login
+            // Name
+            OutlinedTextField(
+                value = name,
+                onValueChange = { name = it },
+                label = { Text("Name") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp)),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    focusedBorderColor = Color(0xFF0CCA9D),
+                    unfocusedBorderColor = Color.White
+                )
+            )
+
+            // Email
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
@@ -85,6 +96,7 @@ fun LoginPage(onLogin: (String, String) -> Unit = { _, _ -> },
 
             Spacer(modifier = Modifier.height(8.dp))
 
+            // Password Field
             PasswordField(
                 value = password,
                 onValueChange = { password = it },
@@ -93,55 +105,30 @@ fun LoginPage(onLogin: (String, String) -> Unit = { _, _ -> },
                 onPasswordToggleClick = { passwordVisible = !passwordVisible }
             )
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-            Button(
-                onClick = { onLogin(email, password) },
-                modifier = Modifier
-                    .fillMaxWidth(0.6f)
-                    .clip(RoundedCornerShape(12.dp)),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF0CCA9D)
-                )
-            ) {
-                Text(text = "Login", color = Color.White)
-            }
-
-            Button(
-                onClick = { onContinueAsGuest() },
-                modifier = Modifier
-                    .fillMaxWidth(0.6f)
-                    .clip(RoundedCornerShape(12.dp)),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF0CCA9D)
-                )
-            ) {
-                Text(text = "Continue as Guest", color = Color.White)
-            }
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            // Register
-            val annotatedString = buildAnnotatedString {
-                append("Not registered yet? ")
-                pushStyle(
-                    SpanStyle(
-                        textDecoration = TextDecoration.Underline,
-                        color = Color(0xFF095FA7),
-                        fontWeight = FontWeight.Bold
-                    )
-                )
-                append("Register.")
-                pop()
-            }
-
-            ClickableText(
-                text = annotatedString,
-                onClick = { onGoToRegister() },
-                modifier = Modifier
-                    .fillMaxWidth(0.6f)
-                    .wrapContentSize(Alignment.Center)
+            // Confirm Password Field
+            PasswordField(
+                value = confirmPassword,
+                onValueChange = { confirmPassword = it },
+                label = "Confirm Password",
+                passwordVisible = confirmPasswordVisible,
+                onPasswordToggleClick = { confirmPasswordVisible = !confirmPasswordVisible }
             )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            Button(
+                onClick = { onRegister(name, email, password) },
+                modifier = Modifier
+                    .fillMaxWidth(0.6f)
+                    .clip(RoundedCornerShape(12.dp)),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF0CCA9D)
+                )
+            ) {
+                Text(text = "Register", color = Color.White)
+            }
         }
     }
 }
