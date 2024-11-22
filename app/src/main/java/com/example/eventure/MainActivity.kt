@@ -41,9 +41,9 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun HomePage(modifier: Modifier = Modifier) {
-    val portugalLatLng = LatLng(39.3999, -8.2245)
+    val coimbraLatLng = LatLng(40.2056, -8.4196)
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(portugalLatLng, 6f)
+        position = CameraPosition.fromLatLngZoom(coimbraLatLng, 12f)
     }
 
     Column(
