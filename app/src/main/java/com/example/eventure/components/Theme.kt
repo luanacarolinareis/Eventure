@@ -1,4 +1,4 @@
-package com.example.eventure.theme
+package com.example.eventure.components
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
