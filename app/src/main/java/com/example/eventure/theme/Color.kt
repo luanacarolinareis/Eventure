@@ -1,4 +1,4 @@
-package com.example.eventure.ui.theme
+package com.example.eventure.theme
 
 import androidx.compose.ui.graphics.Color
 
