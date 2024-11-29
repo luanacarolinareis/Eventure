@@ -1,7 +1,12 @@
 plugins {
-    alias(libs.plugins.android.application)
+    // alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+
+    id("com.android.application")
+    // Add the Google services Gradle plugin
+    id("com.google.gms.google-services")
+    // ...
 }
 
 android {
@@ -56,11 +61,22 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation("com.google.android.gms:play-services-maps:18.1.0")  // ADDED
-    implementation("com.google.maps.android:maps-compose:2.11.1")   // ADDED
-    implementation("androidx.compose.material3:material3:1.2.0-alpha08")    // ADDED
-    implementation("androidx.compose.ui:ui:1.5.1")  // ADDED
-    implementation("androidx.compose.runtime:runtime:1.5.1")    // ADDED
-    implementation("androidx.navigation:navigation-compose:2.7.0")    // ADDED
-    implementation("androidx.compose.ui:ui-text-google-fonts:1.5.1")    // ADDED
+    implementation("com.google.android.gms:play-services-maps:18.1.0")
+    implementation("com.google.maps.android:maps-compose:2.11.1")
+    implementation("androidx.compose.material3:material3:1.2.0-alpha08")
+    implementation("androidx.compose.ui:ui:1.5.1")
+    implementation("androidx.compose.runtime:runtime:1.5.1")
+    implementation("androidx.navigation:navigation-compose:2.7.0")
+    implementation("androidx.compose.ui:ui-text-google-fonts:1.5.1")
+
+    // Import the Firebase BoM
+    implementation(platform("com.google.firebase:firebase-bom:33.6.0"))
+
+    // TODO: Add the dependencies for Firebase products you want to use
+    // When using the BoM, don't specify versions in Firebase dependencies
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-analytics-ktx")
+
+    // Add the dependencies for any other desired Firebase products
+    // https://firebase.google.com/docs/android/setup#available-libraries
 }
