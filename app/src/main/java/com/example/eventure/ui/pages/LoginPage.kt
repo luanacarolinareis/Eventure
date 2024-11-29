@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.eventure.components.bebasNeueFont
 import com.example.eventure.components.PasswordField
+import com.example.eventure.components.uniSans
 
 @Composable
 @Preview(showBackground = true)
@@ -59,7 +60,7 @@ fun LoginPage(onLogin: (String, String) -> Unit = { _, _ -> },
             Text(
                 text = "Maps for events!",
                 style = TextStyle(
-                    fontFamily = bebasNeueFont,
+                    fontFamily = uniSans,
                     fontSize = 25.sp
                 ),
                 color = Color(0xFF095FA7),
