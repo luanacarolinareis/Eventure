@@ -1,66 +1,64 @@
 package com.example.eventure.ui.pages
 
 import androidx.compose.foundation.Image
-import com.example.eventure.R
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Text
-import androidx.compose.material3.Button
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.background
-import androidx.compose.material3.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.ui.draw.clip
-import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.rememberCameraPositionState
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.maps.android.compose.MapProperties
-import com.google.maps.android.compose.MapUiSettings
-import com.google.android.gms.maps.model.LatLng
-import androidx.compose.ui.tooling.preview.Preview
-//For the Featured Events section
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.clickable//To click the featured event
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.sp
-import com.example.eventure.components.bebasNeueFont
-import com.example.eventure.components.uniSans
-//For the pins on the map
-import com.google.maps.android.compose.Marker
-import com.google.maps.android.compose.MarkerState
-import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.runtime.Composable
-import com.google.maps.android.compose.Marker
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.content.ContextCompat
+import com.example.eventure.R
+import com.example.eventure.components.uniSans
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.libraries.places.api.model.AutocompletePrediction
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
+import com.google.android.libraries.places.api.net.PlacesClient
+import com.google.maps.android.compose.*
+import androidx.compose.ui.draw.clip
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.drawable.Drawable
-import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.ContextCompat
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+
 
 @Composable
 @Preview(showBackground = true)
 fun HomePage(modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+    val placesClient = com.google.android.libraries.places.api.Places.createClient(context)
+
     val coimbraLatLng = LatLng(40.2056, -8.4196)
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(coimbraLatLng, 12f)
     }
 
-    // State to track the currently selected event
     var selectedEvent by remember { mutableStateOf<Event?>(null) }
-
-    // Sample featured events with location data
     val featuredEvents = listOf(
         Event("Event 1", "Location 1", "10:00 AM", LatLng(40.2056, -8.4196)),
         Event("Event 2", "Location 2", "2:00 PM", LatLng(40.2111, -8.4200)),
         Event("Event 3", "Location 3", "6:00 PM", LatLng(40.2200, -8.4300))
     )
+
+    var searchQuery by remember { mutableStateOf("") }
+    var suggestions by remember { mutableStateOf<List<AutocompletePrediction>>(emptyList()) }
+
+    LaunchedEffect(searchQuery) {
+        fetchAutocompleteSuggestions(query = searchQuery, placesClient = placesClient) { fetchedSuggestions ->
+            suggestions = fetchedSuggestions
+        }
+    }
 
     Box(modifier = modifier.fillMaxSize()) {
         Column(
@@ -87,25 +85,18 @@ fun HomePage(modifier: Modifier = Modifier) {
                         Image(
                             painter = painterResource(id = R.drawable.menu),
                             contentDescription = "Menu",
-                            modifier = Modifier.size(48.dp)
+                            modifier = Modifier.size(80.dp)
                         )
                     }
 
-                    Button(
-                        onClick = { /* Action */ },
-                        modifier = Modifier
-                            .fillMaxWidth(0.6f),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF0CCA9D)
-                        )
-                    ) {
-                        Text(
-                            text = "Começar pesquisa",
-                            style = TextStyle(
-                                fontFamily = uniSans,
-                            )
-                        )
-                    }
+                    SearchBarWithSuggestions(
+                        query = searchQuery,
+                        onQueryChanged = { newQuery -> searchQuery = newQuery },
+                        suggestions = suggestions,
+                        onSuggestionSelected = { suggestion ->
+                            // Use the placeId to fetch details or adjust map
+                        }
+                    )
                 }
 
                 Image(
@@ -117,14 +108,13 @@ fun HomePage(modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Featured Events Section
             Text(
                 text = "Featured Events",
                 style = TextStyle(
                     fontFamily = uniSans,
                     fontSize = 25.sp
                 ),
-                color = Color(0xFF0CCA9D),
+                color = Color(0xFF095FA7),
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -138,13 +128,10 @@ fun HomePage(modifier: Modifier = Modifier) {
                 items(featuredEvents) { event ->
                     FeaturedEventCard(
                         event = event,
-                        isSelected = event == selectedEvent, // Highlight the selected event
+                        isSelected = event == selectedEvent,
                         onClick = {
-                            selectedEvent = event // Update the selected event
-                            cameraPositionState.position = CameraPosition.fromLatLngZoom(
-                                event.location,
-                                14f // Zoom level for better focus
-                            )
+                            selectedEvent = event
+                            cameraPositionState.position = CameraPosition.fromLatLngZoom(event.location, 14f)
                         }
                     )
                 }
@@ -152,15 +139,70 @@ fun HomePage(modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Google Maps Section
             InteractiveGameMap(
                 featuredEvents = featuredEvents,
                 cameraPositionState = cameraPositionState,
                 selectedEvent = selectedEvent,
-                onMarkerClick = { event ->
-                    selectedEvent = event // Sync selected event with marker click
-                }
+                onMarkerClick = { event -> selectedEvent = event }
             )
+        }
+    }
+}
+
+fun fetchAutocompleteSuggestions(
+    query: String,
+    placesClient: PlacesClient,
+    onSuggestionsFetched: (List<AutocompletePrediction>) -> Unit
+) {
+    if (query.isNotBlank()) {
+        val request = FindAutocompletePredictionsRequest.builder()
+            .setQuery(query)
+            .build()
+
+        placesClient.findAutocompletePredictions(request)
+            .addOnSuccessListener { response -> onSuggestionsFetched(response.autocompletePredictions) }
+            .addOnFailureListener { onSuggestionsFetched(emptyList()) }
+    }
+}
+
+@Composable
+fun SearchBarWithSuggestions(
+    query: String,
+    onQueryChanged: (String) -> Unit,
+    suggestions: List<AutocompletePrediction>,
+    onSuggestionSelected: (AutocompletePrediction) -> Unit
+) {
+    Column {
+        TextField(
+            value = query,
+            onValueChange = onQueryChanged,
+            label = { Text("Search...") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp)),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color(0xFF0CCA9D),
+                focusedBorderColor = Color(0xFF0CCA9D),
+                unfocusedBorderColor = Color(0xFF0CCA9D)
+            ),
+            singleLine = true
+        )
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+                .background(Color.White, RoundedCornerShape(8.dp))
+        ) {
+            items(suggestions) { suggestion ->
+                Text(
+                    text = suggestion.getFullText(null).toString(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { onSuggestionSelected(suggestion) }
+                        .padding(16.dp)
+                )
+            }
         }
     }
 }
@@ -168,7 +210,7 @@ fun HomePage(modifier: Modifier = Modifier) {
 @Composable
 fun InteractiveGameMap(
     featuredEvents: List<Event>,
-    cameraPositionState: com.google.maps.android.compose.CameraPositionState,
+    cameraPositionState: CameraPositionState,
     selectedEvent: Event?,
     onMarkerClick: (Event) -> Unit
 ) {
