@@ -34,7 +34,7 @@ fun AppNavigation() {
 
         // Route for the register page
         composable("register") {
-            RegisterPage()
+            RegisterPage(navController = navController)
         }
     }
 }
