@@ -21,9 +21,11 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.eventure.components.bebasNeueFont
 import com.example.eventure.components.PasswordField
 import com.example.eventure.components.uniSans
+import androidx.compose.ui.platform.LocalContext
+import com.google.firebase.auth.FirebaseAuth
+import android.widget.Toast
 
 @Composable
 @Preview(showBackground = true)
@@ -35,6 +37,9 @@ fun LoginPage(onLogin: (String, String) -> Unit = { _, _ -> },
     var password by remember { mutableStateOf("") }
 
     var passwordVisible by remember { mutableStateOf(false) }
+
+    val auth = FirebaseAuth.getInstance() // Firebase Authentication instance
+    val context = LocalContext.current // To show toast messages
 
     Box(
         modifier = Modifier
@@ -97,7 +102,20 @@ fun LoginPage(onLogin: (String, String) -> Unit = { _, _ -> },
             Spacer(modifier = Modifier.height(32.dp))
 
             Button(
-                onClick = { onLogin(email, password) },
+                onClick = {
+                    // Authenticates user with Firebase
+                    auth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                // Login successful
+                                Toast.makeText(context, "Login successful!", Toast.LENGTH_LONG).show()
+                                onLogin(email, password) // Can redirect or save data
+                            } else {
+                                // Login failed
+                                Toast.makeText(context, "Login failed: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                            }
+                        }
+                },
                 modifier = Modifier
                     .fillMaxWidth(0.6f)
                     .clip(RoundedCornerShape(12.dp)),
