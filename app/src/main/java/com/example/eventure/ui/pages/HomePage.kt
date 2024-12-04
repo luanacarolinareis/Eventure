@@ -43,6 +43,7 @@ import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
+
 @Composable
 @Preview(showBackground = true)
 fun HomePage(modifier: Modifier = Modifier) {
@@ -84,7 +85,7 @@ fun HomePage(modifier: Modifier = Modifier) {
                 ) {
                     IconButton(onClick = { /* Action */ }) {
                         Image(
-                            painter = painterResource(id = R.drawable.menu_icon_green),
+                            painter = painterResource(id = R.drawable.menu),
                             contentDescription = "Menu",
                             modifier = Modifier.size(48.dp)
                         )
@@ -95,7 +96,7 @@ fun HomePage(modifier: Modifier = Modifier) {
                         modifier = Modifier
                             .fillMaxWidth(0.6f),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF20B440)
+                            containerColor = Color(0xFF0CCA9D)
                         )
                     ) {
                         Text(
@@ -123,7 +124,7 @@ fun HomePage(modifier: Modifier = Modifier) {
                     fontFamily = uniSans,
                     fontSize = 25.sp
                 ),
-                color = Color(0xFF20B33F),
+                color = Color(0xFF0CCA9D),
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -274,7 +275,7 @@ fun FeaturedEventCard(event: Event, isSelected: Boolean, onClick: () -> Unit) {
             .clickable(onClick = onClick), // Make the card clickable
         elevation = CardDefaults.cardElevation(4.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (isSelected) Color(0xFF00FF1C) else Color(0xFFF5F5F5) // Dynamic card background
+            containerColor = if (isSelected) Color(0xFF0CCA9D) else Color(0xFFF5F5F5) // Dynamic card background
         )
     ) {
         Row(
