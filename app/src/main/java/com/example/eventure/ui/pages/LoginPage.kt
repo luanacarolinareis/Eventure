@@ -103,18 +103,24 @@ fun LoginPage(onLogin: (String, String) -> Unit = { _, _ -> },
 
             Button(
                 onClick = {
-                    // Authenticates user with Firebase
-                    auth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                // Login successful
-                                Toast.makeText(context, "Login successful!", Toast.LENGTH_LONG).show()
-                                onLogin(email, password) // Can redirect or save data
-                            } else {
-                                // Login failed
-                                Toast.makeText(context, "Login failed: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                    // Check that the email and password are not empty before trying to login
+                    if (email.isNotEmpty() && password.isNotEmpty()) {
+                        // Authenticates user with Firebase
+                        auth.signInWithEmailAndPassword(email, password)
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    // Login successful
+                                    Toast.makeText(context, "Login successful!", Toast.LENGTH_LONG).show()
+                                    onLogin(email, password) // Can redirect or save data
+                                } else {
+                                    // Login failed
+                                    Toast.makeText(context, "Login failed: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                                }
                             }
-                        }
+                    } else {
+                        // Shows an error message if fields are empty
+                        Toast.makeText(context, "Please fill in both email and password", Toast.LENGTH_LONG).show()
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth(0.6f)
@@ -122,7 +128,7 @@ fun LoginPage(onLogin: (String, String) -> Unit = { _, _ -> },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF0CCA9D)
                 )
-            ) {
+            )  {
                 Text(text = "Login", color = Color.White)
             }
 
@@ -157,6 +163,42 @@ fun LoginPage(onLogin: (String, String) -> Unit = { _, _ -> },
             ClickableText(
                 text = annotatedString,
                 onClick = { onGoToRegister() },
+                modifier = Modifier
+                    .fillMaxWidth(0.6f)
+                    .wrapContentSize(Alignment.Center)
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Forgot password
+            val forgotPasswordText = buildAnnotatedString {
+                pushStyle(
+                    SpanStyle(
+                        textDecoration = TextDecoration.Underline,
+                        color = Color(0xFF095FA7),
+                        fontWeight = FontWeight.Bold
+                    )
+                )
+                append("Reset password.")
+                pop()
+            }
+
+            ClickableText(
+                text = forgotPasswordText,
+                onClick = {
+                    if (email.isNotEmpty()) {
+                        auth.sendPasswordResetEmail(email)
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    Toast.makeText(context, "Password reset email sent!", Toast.LENGTH_LONG).show()
+                                } else {
+                                    Toast.makeText(context, "Failed to send reset email: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                                }
+                            }
+                    } else {
+                        Toast.makeText(context, "Please enter your email address first.", Toast.LENGTH_LONG).show()
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth(0.6f)
                     .wrapContentSize(Alignment.Center)
