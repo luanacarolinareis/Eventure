@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.places)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -68,6 +69,8 @@ dependencies {
     implementation("androidx.compose.runtime:runtime:1.5.1")
     implementation("androidx.navigation:navigation-compose:2.7.0")
     implementation("androidx.compose.ui:ui-text-google-fonts:1.5.1")
+    implementation("com.google.accompanist:accompanist-pager:0.32.0")
+
 
     // Import the Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:33.6.0"))

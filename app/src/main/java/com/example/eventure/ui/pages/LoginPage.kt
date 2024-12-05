@@ -72,7 +72,7 @@ fun LoginPage(onLogin: (String, String) -> Unit = { _, _ -> },
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
-                label = { Text("Email") },
+                label = { Text("Email")},
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(12.dp)),
@@ -105,7 +105,7 @@ fun LoginPage(onLogin: (String, String) -> Unit = { _, _ -> },
                     containerColor = Color(0xFF0CCA9D)
                 )
             ) {
-                Text(text = "Login", color = Color.White)
+                Text(text = "Login", color = Color.White, fontFamily = uniSans)
             }
 
             Button(
@@ -129,6 +129,7 @@ fun LoginPage(onLogin: (String, String) -> Unit = { _, _ -> },
                     SpanStyle(
                         textDecoration = TextDecoration.Underline,
                         color = Color(0xFF095FA7),
+                        fontFamily = uniSans,
                         fontWeight = FontWeight.Bold
                     )
                 )
