@@ -91,7 +91,7 @@ fun OrganizerProfilePage(navController: NavController, organizer: Organizer) {
         // Green Back Button
         Button(
             onClick = { navController.popBackStack() },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF20B440)), // Green background
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0CC59B)), // Green background
             modifier = Modifier.padding(vertical = 8.dp),
             shape = RoundedCornerShape(8.dp)
         ) {

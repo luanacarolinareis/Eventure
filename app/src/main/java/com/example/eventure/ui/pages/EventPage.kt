@@ -89,7 +89,7 @@ fun EventPage(navController: NavController, eventId: String, event: Event) {
         // Green Back Button
         Button(
             onClick = { navController.popBackStack() },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF20B440)), // Green background
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0CC59B)), // Green background
             modifier = Modifier
                 .padding(16.dp)
                 .align(Alignment.Start), // Align to the start (left) of the screen
@@ -178,7 +178,7 @@ fun EventPage(navController: NavController, eventId: String, event: Event) {
         // Comments Button
         Button(
             onClick = { /* Handle comments */ },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF20B440)), // Green button
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0CC59B)), // Green button
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .align(Alignment.Start)

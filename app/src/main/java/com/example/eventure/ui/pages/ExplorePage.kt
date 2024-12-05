@@ -104,7 +104,7 @@ fun ExplorePage(navController: NavController, events: List<Event>) {
         ) {
             Button(
                 onClick = { navController.popBackStack() }, // Go back to the previous page
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF20B440)) // Green button
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0CC59B)) // Green button
             ) {
                 Text(
                     text = "Go Back",

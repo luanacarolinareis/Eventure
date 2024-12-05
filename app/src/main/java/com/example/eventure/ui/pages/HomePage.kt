@@ -315,7 +315,7 @@ fun HomePage(navController: NavHostController, modifier: Modifier = Modifier) {
                 ) {
                     IconButton(onClick = { isMenuOpen = true }) {
                         Image(
-                            painter = painterResource(id = R.drawable.menu_icon_green),
+                            painter = painterResource(id = R.drawable.menu),
                             contentDescription = "Menu",
                             modifier = Modifier.size(48.dp)
                         )
@@ -323,7 +323,7 @@ fun HomePage(navController: NavHostController, modifier: Modifier = Modifier) {
                     Button(
                         onClick = { navController.navigate("explore_page") },
                         modifier = Modifier.fillMaxWidth(0.6f),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF20B440))
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0CC59B))
                     ) {
                         Text(
                             text = "Começar pesquisa",
@@ -569,7 +569,7 @@ fun MainMenuContent(onSelectOption: (String) -> Unit, onDismiss: () -> Unit) {
     Spacer(modifier = Modifier.height(8.dp))
     Button(
         onClick = onDismiss,
-        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF20B440)), // Green background
+        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0CC59B)), // Green background
         modifier = Modifier.padding(8.dp) // Add padding if needed
     ) {
         Text(
@@ -684,7 +684,7 @@ fun FiltrosContent(
             Button(
                 onClick = onBack,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF20B33F)) // Green button
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0CC59B)) // Green button
             ) {
                 Text(text = "Back")
             }
@@ -719,7 +719,7 @@ fun GenreFilter(selectedGenres: MutableMap<String, Boolean>) {
                     modifier = Modifier
                         .clickable { selectedGenres[genre] = !(selectedGenres[genre] ?: false) }
                         .background(
-                            color = if (isSelected) Color(0xFF20B440) else Color.Transparent,
+                            color = if (isSelected) Color(0xFF0CC59B) else Color.Transparent,
                             shape = RoundedCornerShape(8.dp)
                         )
                         .padding(8.dp),
@@ -779,7 +779,7 @@ fun TimeRangeFilter(selectedTimeRange: MutableState<Pair<String, String>>) {
             onClick = {
                 selectedTimeRange.value = Pair(startTime, endTime)
             },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF20B440)), // Green background
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0CC59B)), // Green background
             modifier = Modifier.align(Alignment.End)
         ) {
             Text(
@@ -828,7 +828,7 @@ fun DateRangeFilter(selectedDateRange: MutableState<Pair<String, String>>) {
             onClick = {
                 selectedDateRange.value = Pair(startDate, endDate)
             },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF20B440)), // Green background
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0CC59B)), // Green background
             modifier = Modifier.align(Alignment.End)
         ) {
             Text(
@@ -950,13 +950,13 @@ fun MonthlyCalendar(
         ) {
             Button(
                 onClick = { onMonthChange(-1) },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF20B440))
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0CC59B))
             ) {
                 Text(text = "<", style = TextStyle(fontFamily = uniSans))
             }
             Button(
                 onClick = { onMonthChange(1) },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF20B440))
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0CC59B))
             ) {
                 Text(text = ">", style = TextStyle(fontFamily = uniSans))
             }
@@ -999,7 +999,7 @@ fun MonthlyCalendar(
         Button(
             onClick = onBack,
             modifier = Modifier.align(Alignment.CenterHorizontally),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF20B440))
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0CC59B))
         ) {
             Text("Back")
         }
@@ -1073,7 +1073,7 @@ fun EventListForDay(
         Button(
             onClick = onBack,
             modifier = Modifier.align(Alignment.CenterHorizontally),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF20B440))
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0CC59B))
         ) {
             Text("Back")
         }
@@ -1163,7 +1163,7 @@ fun FeaturedEventCard(event: Event, isSelected: Boolean, onClick: () -> Unit) {
             .clickable(onClick = onClick), // Make the card clickable
         elevation = CardDefaults.cardElevation(4.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (isSelected) Color(0xFF00FF1C) else Color(0xFFF5F5F5) // Dynamic card background
+            containerColor = if (isSelected) Color(0xFF0CC59B) else Color(0xFFF5F5F5) // Dynamic card background
         )
     ) {
         Row(
