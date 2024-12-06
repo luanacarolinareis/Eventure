@@ -293,6 +293,8 @@ fun HomePage(navController: NavHostController, modifier: Modifier = Modifier) {
         typeMatch && genreMatch && timeMatch && dateMatch
     }
 
+    Spacer(modifier = Modifier.height(30.dp))
+
     Box(modifier = modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -338,7 +340,7 @@ fun HomePage(navController: NavHostController, modifier: Modifier = Modifier) {
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(5.dp))
 
             InteractiveGameMap(
                 featuredEvents = filteredEvents,
@@ -402,8 +404,9 @@ fun InteractiveGameMap(
 
     GoogleMap(
         modifier = Modifier
-            .fillMaxWidth()
-            .height(700.dp)
+            .fillMaxWidth(0.95f)
+            .fillMaxHeight()
+            .padding(horizontal = 16.dp, vertical = 16.dp)
             .clip(RoundedCornerShape(16.dp))
             .background(Color.White),
         cameraPositionState = cameraPositionState,
