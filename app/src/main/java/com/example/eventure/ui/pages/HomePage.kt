@@ -462,7 +462,7 @@ fun MenuPopup(
     onDismiss: () -> Unit,
     selectedFilters: MutableMap<String, Boolean>,
     selectedTimeRange: MutableState<Pair<String, String>>,
-    selectedDateRange:  MutableState<Pair<String, String>>,
+    selectedDateRange: MutableState<Pair<String, String>>,
     selectedGenres: MutableMap<String, Boolean>,
     events: List<Event>,
     navController: NavHostController,
@@ -500,14 +500,15 @@ fun MenuPopup(
                         selectedFilters = selectedFilters,
                         selectedTimeRange = selectedTimeRange,
                         selectedDateRange = selectedDateRange,
-                        selectedGenres = selectedGenres, // Pass this parameter correctly
+                        selectedGenres = selectedGenres,
                         onBack = { activeOption = null }
                     )
                     "Calendário" -> CalendarContent(
-                        events = allEvents,
+                        events = events,
                         onBack = { activeOption = null },
-                        navController = navController // Pass navController here
+                        navController = navController
                     )
+                    "Info" -> InfoContent(onBack = { activeOption = null }) // Add InfoContent here
                 }
             }
         }
@@ -554,30 +555,46 @@ fun MainMenuContent(onSelectOption: (String) -> Unit, onDismiss: () -> Unit) {
         color = Color.Black
     )
     Divider(modifier = Modifier.padding(vertical = 8.dp))
+
+    // Filtros Button
     MenuOptionRow(
         iconResId = R.drawable.filter_icon,
         label = "Filtros",
         onClick = { onSelectOption("Filtros") }
     )
+
+    // Calendário Button
     MenuOptionRow(
         iconResId = R.drawable.calendar,
         label = "Calendário",
         onClick = { onSelectOption("Calendário") }
     )
+
+    // Definições Button
     MenuOptionRow(
         iconResId = R.drawable.options_icon,
         label = "Definições",
         onClick = { onSelectOption("Definições") }
     )
+
+    // Info Button
+    MenuOptionRow(
+        iconResId = R.drawable.info_icon, // Add your "info" icon resource
+        label = "Info",
+        onClick = { onSelectOption("Info") } // Trigger the Info content
+    )
+
     Spacer(modifier = Modifier.height(8.dp))
+
+    // Close Button
     Button(
         onClick = onDismiss,
         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0CC59B)), // Green background
-        modifier = Modifier.padding(8.dp) // Add padding if needed
+        modifier = Modifier.padding(8.dp)
     ) {
         Text(
             text = "Close",
-            style = TextStyle(fontFamily = uniSans, color = Color.White) // Apply uniSans font and white text color
+            style = TextStyle(fontFamily = uniSans, color = Color.White) // Apply uniSans font
         )
     }
 }
@@ -602,6 +619,41 @@ fun MenuOptionRow(iconResId: Int, label: String, onClick: () -> Unit) {
             style = TextStyle(fontFamily = uniSans, fontSize = 18.sp),
             color = Color.Gray
         )
+    }
+}
+@Composable
+fun InfoContent(onBack: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Text(
+            text = "About Eventure",
+            style = TextStyle(fontFamily = uniSans, fontSize = 24.sp),
+            color = Color.Black
+        )
+        Text(
+            text = "Aviso legal: esta aplicação informática foi realizada por alunos no \n" +
+                    "âmbito de uma disciplina– Processos de gestão e Inovação - do 3º \n" +
+                    "ano da licenciatura de Engenharia Informática da Faculdade de \n" +
+                    "Ciências e Tecnologia da Universidade de Coimbra (FCTUC), pelo \n" +
+                    "que a FCTUC não se responsabiliza pelo seu uso e conteúdos.",
+            style = TextStyle(fontFamily = uniSans, fontSize = 16.sp),
+            color = Color.Gray
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(
+            onClick = onBack,
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0CC59B)) // Green button
+        ) {
+            Text(
+                text = "Back",
+                style = TextStyle(fontFamily = uniSans, color = Color.White) // UniSans font
+            )
+        }
     }
 }
 @Composable
