@@ -79,8 +79,23 @@ import androidx.navigation.compose.rememberNavController
 
 import androidx.compose.ui.layout.ContentScale
 
+import com.google.android.libraries.places.api.model.AutocompletePrediction
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
+import com.google.android.libraries.places.api.net.PlacesClient
+import androidx.compose.ui.focus.*
+
 @Composable
 fun ExplorePage(navController: NavController, events: List<Event>) {
+    val context = LocalContext.current
+    val placesClient = com.google.android.libraries.places.api.Places.createClient(context)
+    var searchQuery by remember { mutableStateOf("") }
+    var suggestions by remember { mutableStateOf<List<AutocompletePrediction>>(emptyList()) }
+    LaunchedEffect(searchQuery) {
+        fetchAutocompleteSuggestions(query = searchQuery, placesClient = placesClient) { fetchedSuggestions ->
+            suggestions = fetchedSuggestions
+        }
+    }
+
     // Sort events by type: Premium, Rare, Common
     val sortedEvents = events.sortedBy {
         when (it.type) {
@@ -94,7 +109,7 @@ fun ExplorePage(navController: NavController, events: List<Event>) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(Color(0xFFFCE2B1))
     ) {
         // Go Back Button
         Box(
@@ -113,8 +128,17 @@ fun ExplorePage(navController: NavController, events: List<Event>) {
             }
         }
 
+        SearchBarWithSuggestions(
+            query = searchQuery,
+            onQueryChanged = { newQuery -> searchQuery = newQuery },
+            suggestions = suggestions,
+            onSuggestionSelected = { suggestion ->
+                // Use the placeId to fetch details or adjust map
+            }
+        )
+
         // Search Bar
-        Box(
+        /* Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
@@ -127,7 +151,7 @@ fun ExplorePage(navController: NavController, events: List<Event>) {
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(8.dp)
             )
-        }
+        } */
 
         // Event List by Type
         LazyColumn(
@@ -173,7 +197,89 @@ fun ExplorePage(navController: NavController, events: List<Event>) {
     }
 }
 
+fun fetchAutocompleteSuggestions(
+    query: String,
+    placesClient: PlacesClient,
+    onSuggestionsFetched: (List<AutocompletePrediction>) -> Unit
+) {
+    if (query.isNotBlank()) {
+        val request = FindAutocompletePredictionsRequest.builder()
+            .setQuery(query)
+            .build()
 
+        placesClient.findAutocompletePredictions(request)
+            .addOnSuccessListener { response -> onSuggestionsFetched(response.autocompletePredictions) }
+            .addOnFailureListener { onSuggestionsFetched(emptyList()) }
+    }
+}
+
+@Composable
+fun SearchBarWithSuggestions(
+    query: String,
+    onQueryChanged: (String) -> Unit,
+    suggestions: List<AutocompletePrediction>,
+    onSuggestionSelected: (AutocompletePrediction) -> Unit
+) {
+    var isFocused by remember { mutableStateOf(false) }
+    val focusRequester = remember { FocusRequester() }
+
+    Column {
+        // Campo de busca
+        OutlinedTextField(
+            value = query,
+            onValueChange = { newQuery ->
+                onQueryChanged(newQuery)
+                isFocused = newQuery.isNotBlank() // Atualiza o foco apenas se o texto não estiver vazio
+            },
+            placeholder = { Text("Search") },
+            leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search Icon") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .focusRequester(focusRequester)
+                .onFocusChanged { focusState -> isFocused = focusState.isFocused && query.isNotBlank() }
+                .focusTarget(),
+            shape = RoundedCornerShape(8.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White,
+                focusedBorderColor = Color(0xFF0CCA9D),
+                unfocusedBorderColor = Color(0xFF0CCA9D),
+                cursorColor = Color(0xFF0CCA9D)
+            ),
+            singleLine = true
+        )
+
+        // Mostrar sugestões apenas se houver foco, sugestões disponíveis e texto preenchido
+        if (isFocused && query.isNotBlank() && suggestions.isNotEmpty()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .background(Color.White, RoundedCornerShape(8.dp))
+                    .heightIn(max = 200.dp) // Altura suficiente para 2 sugestões
+            ) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    items(suggestions) { suggestion ->
+                        Text(
+                            text = suggestion.getFullText(null).toString(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    onSuggestionSelected(suggestion)
+                                    isFocused = false // Fechar sugestões ao selecionar
+                                }
+                                .padding(16.dp)
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
 
 @Composable
 fun EventCard(event: Event, navController: NavController) {
