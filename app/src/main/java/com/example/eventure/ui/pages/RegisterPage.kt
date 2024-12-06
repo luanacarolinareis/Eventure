@@ -176,7 +176,7 @@ fun RegisterPage(
                                     ).show()
                                 }
                             }
-                    // Otherwise...
+                        // Otherwise...
                     } else {
                         Toast.makeText(
                             context,

@@ -21,6 +21,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.eventure.components.bebasNeueFont
 import com.example.eventure.components.PasswordField
 import com.example.eventure.components.uniSans
 import androidx.compose.ui.platform.LocalContext
@@ -129,7 +130,7 @@ fun LoginPage(onLogin: (String, String) -> Unit = { _, _ -> },
                     containerColor = Color(0xFF0CCA9D)
                 )
             )  {
-                Text(text = "Login", color = Color.White)
+                Text(text = "Login", color = Color.White, fontFamily = uniSans)
             }
 
             Button(
@@ -141,7 +142,7 @@ fun LoginPage(onLogin: (String, String) -> Unit = { _, _ -> },
                     containerColor = Color(0xFF0CCA9D)
                 )
             ) {
-                Text(text = "Continue as Guest", color = Color.White)
+                Text(text = "Continue as Guest", color = Color.White, fontFamily = uniSans)
             }
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -153,6 +154,7 @@ fun LoginPage(onLogin: (String, String) -> Unit = { _, _ -> },
                     SpanStyle(
                         textDecoration = TextDecoration.Underline,
                         color = Color(0xFF095FA7),
+                        fontFamily = uniSans,
                         fontWeight = FontWeight.Bold
                     )
                 )

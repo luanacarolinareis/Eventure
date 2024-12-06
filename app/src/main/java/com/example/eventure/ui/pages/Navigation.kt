@@ -5,6 +5,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 
 @Composable
 @Preview(showBackground = true)
@@ -29,12 +31,44 @@ fun AppNavigation() {
 
         // Route for the home page
         composable("home") {
-            HomePage()
+            HomePage(navController = navController)
         }
 
         // Route for the register page
         composable("register") {
             RegisterPage(navController = navController)
+        }
+
+        // Explore/Search Page
+        composable("explore_page") {
+            val events = allEvents // Replace this with dynamic events if applicable
+            ExplorePage(navController, events)
+        }
+        composable(
+            route = "event_page/{eventId}",
+            arguments = listOf(navArgument("eventId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val eventId = backStackEntry.arguments?.getString("eventId") ?: ""
+            val event = allEvents.firstOrNull { it.title == eventId } // Retrieve event details
+            if (event != null) {
+                EventPage(navController = navController, eventId = eventId, event = event)
+            } else {
+                // Handle event not found
+            }
+        }
+
+        // Organizer Profile Page
+        composable(
+            route = "organizer_profile/{organizerId}",
+            arguments = listOf(navArgument("organizerId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val organizerId = backStackEntry.arguments?.getString("organizerId") ?: ""
+            val organizer = allOrganizers.firstOrNull { it.id == organizerId } // Retrieve organizer details
+            if (organizer != null) {
+                OrganizerProfilePage(navController = navController, organizer = organizer)
+            } else {
+                // Handle organizer not found
+            }
         }
     }
 }
