@@ -457,6 +457,7 @@ fun InteractiveGameMap(
     }
 }
 
+
 @Composable
 fun MenuPopup(
     onDismiss: () -> Unit,
