@@ -13,15 +13,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.eventure.R
 import com.example.eventure.components.bebasNeueFont
 import androidx.compose.ui.unit.sp
 import com.example.eventure.components.PasswordField
+import androidx.compose.ui.platform.LocalContext
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
+import android.widget.Toast
+import androidx.navigation.NavController
 
 @Composable
-@Preview(showBackground = true)
-fun RegisterPage(onRegister: (String, String, String) -> Unit = { _, _, _ -> }) {
+fun RegisterPage(
+    navController: NavController,
+    onRegister: (String, String, String) -> Unit = { _, _, _ -> }
+) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
@@ -29,6 +35,9 @@ fun RegisterPage(onRegister: (String, String, String) -> Unit = { _, _, _ -> }) 
 
     var passwordVisible by remember { mutableStateOf(false) }
     var confirmPasswordVisible by remember { mutableStateOf(false) }
+
+    val auth = FirebaseAuth.getInstance() // Initialize FirebaseAuth
+    val context = LocalContext.current // Obtains the current context
 
     Box(
         modifier = Modifier
@@ -119,7 +128,63 @@ fun RegisterPage(onRegister: (String, String, String) -> Unit = { _, _, _ -> }) 
             Spacer(modifier = Modifier.height(32.dp))
 
             Button(
-                onClick = { onRegister(name, email, password) },
+                onClick = {
+                    // Verifies if the name is empty
+                    if (name.isBlank()) {
+                        Toast.makeText(
+                            context,
+                            "Name cannot be empty!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        return@Button
+                    }
+
+                    // Passwords must match
+                    if (password == confirmPassword) {
+                        auth.createUserWithEmailAndPassword(email, password)
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    // Get the newly created user
+                                    val user = auth.currentUser
+                                    val profileUpdates = UserProfileChangeRequest.Builder()
+                                        .setDisplayName(name) // Configure the user name
+                                        .build()
+
+                                    user?.updateProfile(profileUpdates)
+                                        ?.addOnCompleteListener { profileTask ->
+                                            if (profileTask.isSuccessful) {
+                                                Toast.makeText(
+                                                    context,
+                                                    "Registration successful!",
+                                                    Toast.LENGTH_LONG
+                                                ).show()
+                                                onRegister(name, email, password) // Can redirect or save data
+                                                navController.navigate("home") // Redirects to the home page
+                                            } else {
+                                                Toast.makeText(
+                                                    context,
+                                                    "Failed to update profile: ${profileTask.exception?.message}",
+                                                    Toast.LENGTH_LONG
+                                                ).show()
+                                            }
+                                        }
+                                } else {
+                                    Toast.makeText(
+                                        context,
+                                        "Registration failed: ${task.exception?.message}",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
+                            }
+                        // Otherwise...
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "Passwords do not match",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth(0.6f)
                     .clip(RoundedCornerShape(12.dp)),

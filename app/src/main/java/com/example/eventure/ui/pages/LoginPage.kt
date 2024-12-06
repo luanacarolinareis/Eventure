@@ -24,6 +24,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.eventure.components.bebasNeueFont
 import com.example.eventure.components.PasswordField
 import com.example.eventure.components.uniSans
+import androidx.compose.ui.platform.LocalContext
+import com.google.firebase.auth.FirebaseAuth
+import android.widget.Toast
 
 @Composable
 @Preview(showBackground = true)
@@ -35,6 +38,9 @@ fun LoginPage(onLogin: (String, String) -> Unit = { _, _ -> },
     var password by remember { mutableStateOf("") }
 
     var passwordVisible by remember { mutableStateOf(false) }
+
+    val auth = FirebaseAuth.getInstance() // Firebase Authentication instance
+    val context = LocalContext.current // To show toast messages
 
     Box(
         modifier = Modifier
@@ -72,7 +78,7 @@ fun LoginPage(onLogin: (String, String) -> Unit = { _, _ -> },
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
-                label = { Text("Email")},
+                label = { Text("Email") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(12.dp)),
@@ -97,14 +103,33 @@ fun LoginPage(onLogin: (String, String) -> Unit = { _, _ -> },
             Spacer(modifier = Modifier.height(32.dp))
 
             Button(
-                onClick = { onLogin(email, password) },
+                onClick = {
+                    // Check that the email and password are not empty before trying to login
+                    if (email.isNotEmpty() && password.isNotEmpty()) {
+                        // Authenticates user with Firebase
+                        auth.signInWithEmailAndPassword(email, password)
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    // Login successful
+                                    Toast.makeText(context, "Login successful!", Toast.LENGTH_LONG).show()
+                                    onLogin(email, password) // Can redirect or save data
+                                } else {
+                                    // Login failed
+                                    Toast.makeText(context, "Login failed: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                                }
+                            }
+                    } else {
+                        // Shows an error message if fields are empty
+                        Toast.makeText(context, "Please fill in both email and password", Toast.LENGTH_LONG).show()
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth(0.6f)
                     .clip(RoundedCornerShape(12.dp)),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF0CCA9D)
                 )
-            ) {
+            )  {
                 Text(text = "Login", color = Color.White, fontFamily = uniSans)
             }
 
@@ -117,7 +142,7 @@ fun LoginPage(onLogin: (String, String) -> Unit = { _, _ -> },
                     containerColor = Color(0xFF0CCA9D)
                 )
             ) {
-                Text(text = "Continue as Guest", color = Color.White)
+                Text(text = "Continue as Guest", color = Color.White, fontFamily = uniSans)
             }
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -140,6 +165,42 @@ fun LoginPage(onLogin: (String, String) -> Unit = { _, _ -> },
             ClickableText(
                 text = annotatedString,
                 onClick = { onGoToRegister() },
+                modifier = Modifier
+                    .fillMaxWidth(0.6f)
+                    .wrapContentSize(Alignment.Center)
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Forgot password
+            val forgotPasswordText = buildAnnotatedString {
+                pushStyle(
+                    SpanStyle(
+                        textDecoration = TextDecoration.Underline,
+                        color = Color(0xFF095FA7),
+                        fontWeight = FontWeight.Bold
+                    )
+                )
+                append("Reset password.")
+                pop()
+            }
+
+            ClickableText(
+                text = forgotPasswordText,
+                onClick = {
+                    if (email.isNotEmpty()) {
+                        auth.sendPasswordResetEmail(email)
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    Toast.makeText(context, "Password reset email sent!", Toast.LENGTH_LONG).show()
+                                } else {
+                                    Toast.makeText(context, "Failed to send reset email: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                                }
+                            }
+                    } else {
+                        Toast.makeText(context, "Please enter your email address first.", Toast.LENGTH_LONG).show()
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth(0.6f)
                     .wrapContentSize(Alignment.Center)

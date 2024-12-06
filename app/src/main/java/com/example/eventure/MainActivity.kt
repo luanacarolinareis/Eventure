@@ -5,11 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.example.eventure.ui.pages.AppNavigation
 import com.example.eventure.components.EventureTheme
-
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
 import android.util.Log
-
+import com.google.android.libraries.places.api.Places
 /*import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
@@ -30,6 +29,11 @@ class MainActivity : ComponentActivity() {
         }
         analytics.logEvent("test_event", bundle)
         Log.d("FirebaseAnalytics", "Test event sent to Firebase Analytics")
+
+        // Initialize the Places API
+        if (!Places.isInitialized()) {
+            Places.initialize(applicationContext, getString(R.string.google_maps_key))
+        }
 
         setContent {
             EventureTheme {

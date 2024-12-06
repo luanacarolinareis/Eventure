@@ -54,7 +54,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.places)
+    // implementation(libs.places)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -70,7 +70,8 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.0")
     implementation("androidx.compose.ui:ui-text-google-fonts:1.5.1")
     implementation("com.google.accompanist:accompanist-pager:0.32.0")
-
+    implementation("com.google.android.libraries.places:places:3.2.0")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
 
     // Import the Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:33.6.0"))
@@ -79,6 +80,7 @@ dependencies {
     // When using the BoM, don't specify versions in Firebase dependencies
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-auth")
 
     // Add the dependencies for any other desired Firebase products
     // https://firebase.google.com/docs/android/setup#available-libraries
