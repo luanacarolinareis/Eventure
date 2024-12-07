@@ -82,6 +82,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.maps.android.compose.CameraPositionState
 import kotlinx.coroutines.launch
 
 
@@ -323,9 +324,9 @@ fun HomePage(navController: NavHostController, modifier: Modifier = Modifier) {
                         )
                     }
                     Button(
-                        onClick = { navController.navigate("explore_page") },
                         modifier = Modifier.fillMaxWidth(0.6f),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0CC59B))
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0CC59B)),
+                        onClick = { }
                     ) {
                         Text(
                             text = "Começar pesquisa",
@@ -338,6 +339,21 @@ fun HomePage(navController: NavHostController, modifier: Modifier = Modifier) {
                     contentDescription = "App Logo",
                     modifier = Modifier.size(100.dp)
                 )
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Button(
+                    onClick = { navController.navigate("explore_page") },
+                    modifier = Modifier.fillMaxWidth(0.6f),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0CC59B))
+                ) {
+                    Text(
+                        text = "Explorar",
+                        style = TextStyle(fontFamily = uniSans)
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(5.dp))
@@ -368,7 +384,7 @@ fun HomePage(navController: NavHostController, modifier: Modifier = Modifier) {
 @Composable
 fun InteractiveGameMap(
     featuredEvents: List<Event>,
-    cameraPositionState: com.google.maps.android.compose.CameraPositionState,
+    cameraPositionState: CameraPositionState,
     selectedEvent: Event?,
     onMarkerClick: (Event) -> Unit,
     navController: NavHostController
@@ -860,7 +876,7 @@ fun FilterRow(filter: String, isSelected: Boolean, onToggle: () -> Unit) {
             .fillMaxWidth()
             .clickable(onClick = onToggle) // Toggle selection state on click
             .padding(vertical = 8.dp)
-        .let { if (isPremium) it.shimmerEffect() else it },
+            .let { if (isPremium) it.shimmerEffect() else it },
         verticalAlignment = Alignment.CenterVertically
     ) {
         // Load the respective image for the filter
