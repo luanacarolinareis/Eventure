@@ -20,70 +20,38 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapUiSettings
 import com.google.android.gms.maps.model.LatLng
-import androidx.compose.ui.tooling.preview.Preview
-//For the Featured Events section
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.clickable//To click the featured event
+import androidx.compose.foundation.clickable
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
-import com.example.eventure.components.bebasNeueFont
 import com.example.eventure.components.uniSans
-//For the pins on the map
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.res.painterResource
 import androidx.compose.runtime.Composable
-import com.google.maps.android.compose.Marker
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.drawable.Drawable
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
-
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.LinearGradientShader
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.util.lerp
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
 import java.time.LocalDate
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.navigation.NavHostController
-
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-
 import androidx.compose.ui.window.Popup
-import androidx.compose.ui.window.PopupProperties
 import androidx.compose.ui.unit.IntOffset
 import com.google.android.gms.maps.CameraUpdateFactory
-
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
-
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 
 // Icon resource mappings
 val combinedIconResources = mapOf(
@@ -328,7 +296,7 @@ fun HomePage(navController: NavHostController, modifier: Modifier = Modifier) {
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0CC59B))
                     ) {
                         Text(
-                            text = "Começar pesquisa",
+                            text = "Start searching",
                             style = TextStyle(fontFamily = uniSans)
                         )
                     }
@@ -496,19 +464,56 @@ fun MenuPopup(
                         onSelectOption = { activeOption = it },
                         onDismiss = onDismiss
                     )
-                    "Filtros" -> FiltrosContent(
+                    "Filters" -> FiltersContent(
                         selectedFilters = selectedFilters,
                         selectedTimeRange = selectedTimeRange,
                         selectedDateRange = selectedDateRange,
                         selectedGenres = selectedGenres, // Pass this parameter correctly
                         onBack = { activeOption = null }
                     )
-                    "Calendário" -> CalendarContent(
+                    "Calendar" -> CalendarContent(
                         events = allEvents,
                         onBack = { activeOption = null },
                         navController = navController // Pass navController here
                     )
+                    "About" -> AboutPopup(onDismiss = { activeOption = null })
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun AboutPopup(onDismiss: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .width(300.dp)
+            .wrapContentHeight()
+            .background(Color.Transparent)
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "About the app...",
+                style = TextStyle(fontFamily = uniSans, fontSize = 20.sp, fontWeight = FontWeight.Bold),
+                color = Color.Black
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "This app was created by students within the scope of a subject - Management and Innovation Processes - from the 3rd year of the Computer Engineering degree at the Faculty of Science and Technology of the University of Coimbra (FCTUC), so FCTUC is not responsible for the its use and contents.",
+                style = TextStyle(fontFamily = uniSans, fontSize = 14.sp),
+                color = Color.Gray,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                onClick = onDismiss,
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0CC59B)) // Botão verde
+            ) {
+                Text("Close", color = Color.White)
             }
         }
     }
@@ -549,25 +554,30 @@ fun EventRow(event: Event, onEventClick: (String) -> Unit) {
 @Composable
 fun MainMenuContent(onSelectOption: (String) -> Unit, onDismiss: () -> Unit) {
     Text(
-        text = "Menu Opções",
+        text = "Menu",
         style = TextStyle(fontFamily = uniSans, fontSize = 24.sp),
         color = Color.Black
     )
     Divider(modifier = Modifier.padding(vertical = 8.dp))
     MenuOptionRow(
         iconResId = R.drawable.filter_icon,
-        label = "Filtros",
-        onClick = { onSelectOption("Filtros") }
+        label = "Filters",
+        onClick = { onSelectOption("Filters") }
     )
     MenuOptionRow(
         iconResId = R.drawable.calendar,
-        label = "Calendário",
-        onClick = { onSelectOption("Calendário") }
+        label = "Calendar",
+        onClick = { onSelectOption("Calendar") }
     )
     MenuOptionRow(
         iconResId = R.drawable.options_icon,
-        label = "Definições",
-        onClick = { onSelectOption("Definições") }
+        label = "Settings",
+        onClick = { onSelectOption("Settings") }
+    )
+    MenuOptionRow(
+        iconResId = R.drawable.about,
+        label = "About",
+        onClick = { onSelectOption("About") }
     )
     Spacer(modifier = Modifier.height(8.dp))
     Button(
@@ -605,7 +615,7 @@ fun MenuOptionRow(iconResId: Int, label: String, onClick: () -> Unit) {
     }
 }
 @Composable
-fun FiltrosContent(
+fun FiltersContent(
     selectedFilters: MutableMap<String, Boolean>,
     selectedTimeRange: MutableState<Pair<String, String>>,
     selectedDateRange: MutableState<Pair<String, String>>,
@@ -626,7 +636,7 @@ fun FiltrosContent(
                 .heightIn(max = 400.dp) // Constrain height to ensure the popup doesn't grow too large
         ) {
             Text(
-                text = "Filtros",
+                text = "Filters",
                 style = TextStyle(fontFamily = uniSans, fontSize = 24.sp),
                 color = Color.Black
             )
@@ -689,7 +699,7 @@ fun FiltrosContent(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0CC59B)) // Green button
             ) {
-                Text(text = "Back")
+                Text(text = "Apply all")
             }
         }
     }
@@ -720,7 +730,7 @@ fun GenreFilter(selectedGenres: MutableMap<String, Boolean>) {
                 val isSelected = selectedGenres[genre] == true
                 Column(
                     modifier = Modifier
-                        .clickable { selectedGenres[genre] = !(selectedGenres[genre] ?: false) }
+                        .clickable { selectedGenres[genre] = selectedGenres[genre] != true }
                         .background(
                             color = if (isSelected) Color(0xFF0CC59B) else Color.Transparent,
                             shape = RoundedCornerShape(8.dp)
@@ -1095,14 +1105,14 @@ fun createMonthGrid(month: LocalDate): List<LocalDate?> {
 }
 
 @Composable
-fun DefinicoesContent(onBack: () -> Unit) {
+fun SettingsContent(onBack: () -> Unit) {
     Text(
-        text = "Definições",
+        text = "Settings",
         style = TextStyle(fontFamily = uniSans, fontSize = 24.sp),
         color = Color.Black
     )
     Spacer(modifier = Modifier.height(8.dp))
-    Text(text = "Definições content goes here.", style = TextStyle(fontSize = 16.sp), color = Color.Gray)
+    Text(text = "Settings content goes here.", style = TextStyle(fontSize = 16.sp), color = Color.Gray)
     Spacer(modifier = Modifier.height(16.dp))
     Button(onClick = onBack) {
         Text(text = "Back")

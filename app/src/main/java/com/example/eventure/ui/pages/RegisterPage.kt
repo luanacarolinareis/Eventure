@@ -19,19 +19,16 @@ import androidx.compose.ui.unit.sp
 import com.example.eventure.components.PasswordField
 import androidx.compose.ui.platform.LocalContext
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.UserProfileChangeRequest
 import android.widget.Toast
-import androidx.navigation.NavController
+import com.google.firebase.firestore.FirebaseFirestore
 
 @Composable
-fun RegisterPage(
-    navController: NavController,
-    onRegister: (String, String, String) -> Unit = { _, _, _ -> }
-) {
+fun RegisterPage( onRegister: (String, String, String) -> Unit = { _, _, _ -> } ) {
+    var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
-    var name by remember { mutableStateOf("") }
+    var userType by remember { mutableStateOf("User") } // Default to "User"
 
     var passwordVisible by remember { mutableStateOf(false) }
     var confirmPasswordVisible by remember { mutableStateOf(false) }
@@ -69,7 +66,7 @@ fun RegisterPage(
                 color = Color(0xFF095FA7),
             )
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             // Name
             OutlinedTextField(
@@ -124,8 +121,27 @@ fun RegisterPage(
                 passwordVisible = confirmPasswordVisible,
                 onPasswordToggleClick = { confirmPasswordVisible = !confirmPasswordVisible }
             )
+            Spacer(modifier = Modifier.height(16.dp))
 
-            Spacer(modifier = Modifier.height(32.dp))
+            // User Type Selection
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceAround
+            ) {
+                RadioButton(
+                    selected = userType == "Organizer",
+                    onClick = { userType = "Organizer" }
+                )
+                Text("I'm an Organizer")
+
+                RadioButton(
+                    selected = userType == "User",
+                    onClick = { userType = "User" }
+                )
+                Text("I'm a User")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             Button(
                 onClick = {
@@ -144,29 +160,25 @@ fun RegisterPage(
                         auth.createUserWithEmailAndPassword(email, password)
                             .addOnCompleteListener { task ->
                                 if (task.isSuccessful) {
-                                    // Get the newly created user
-                                    val user = auth.currentUser
-                                    val profileUpdates = UserProfileChangeRequest.Builder()
-                                        .setDisplayName(name) // Configure the user name
-                                        .build()
+                                    val uid = auth.currentUser?.uid ?: ""
+                                    val db = FirebaseFirestore.getInstance()
 
-                                    user?.updateProfile(profileUpdates)
-                                        ?.addOnCompleteListener { profileTask ->
-                                            if (profileTask.isSuccessful) {
-                                                Toast.makeText(
-                                                    context,
-                                                    "Registration successful!",
-                                                    Toast.LENGTH_LONG
-                                                ).show()
-                                                onRegister(name, email, password) // Can redirect or save data
-                                                navController.navigate("home") // Redirects to the home page
-                                            } else {
-                                                Toast.makeText(
-                                                    context,
-                                                    "Failed to update profile: ${profileTask.exception?.message}",
-                                                    Toast.LENGTH_LONG
-                                                ).show()
-                                            }
+                                    // Creation of user data with name, email, type and uid
+                                    val userData = mapOf(
+                                        "name" to name,
+                                        "email" to email,
+                                        "type" to userType,
+                                        "uid" to uid
+                                    )
+
+                                    // Saves user data to Firestore
+                                    db.collection("users").document(uid).set(userData)
+                                        .addOnSuccessListener {
+                                            Toast.makeText(context, "Registration successful!", Toast.LENGTH_LONG).show()
+                                            onRegister(email, password, userType)
+                                        }
+                                        .addOnFailureListener {
+                                            Toast.makeText(context, "Failed to save user data!", Toast.LENGTH_LONG).show()
                                         }
                                 } else {
                                     Toast.makeText(
