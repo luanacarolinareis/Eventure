@@ -96,21 +96,37 @@ fun ExplorePage(navController: NavController, events: List<Event>) {
             .fillMaxSize()
             .background(Color.White)
     ) {
-        // Go Back Button
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            Button(
-                onClick = { navController.popBackStack() }, // Go back to the previous page
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0CC59B)) // Green button
-            ) {
-                Text(
-                    text = "Go Back",
-                    style = TextStyle(fontFamily = uniSans, color = Color.White)
-                )
+            // Go Back Button
+            Row (
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ){
+                Button(
+                    onClick = { navController.popBackStack() }, // Go back to the previous page
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0CC59B)) // Green button
+                ) {
+                    Text(
+                        text = "Go Back",
+                        style = TextStyle(fontFamily = uniSans, color = Color.White)
+                    )
+                }
+                // Add Event Button
+
+                Button(
+                    onClick = { navController.navigate("add_event_page/${organizer1.id}") },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0CC59B)) // Green button
+                ) {
+                    Text(
+                        text = "Add Event",
+                        style = TextStyle(fontFamily = uniSans, color = Color.White)
+                    )
+                }
             }
+
         }
 
         // Search Bar

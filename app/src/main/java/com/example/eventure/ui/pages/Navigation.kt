@@ -70,5 +70,19 @@ fun AppNavigation() {
                 // Handle organizer not found
             }
         }
+
+        // Add event Page
+        composable(
+            route = "add_event_page/{organizerId}",
+            arguments = listOf(navArgument("organizerId") { type = NavType.StringType })
+        )  { backStackEntry ->
+            val organizerId = backStackEntry.arguments?.getString("organizerId") ?: ""
+            val organizer = allOrganizers.firstOrNull { it.id == organizerId } // Retrieve organizer details
+            if (organizer != null) {
+                AddEventPage(navController = navController, organizer = organizer)
+            } else {
+                // Handle organizer not found
+            }
+        }
     }
 }

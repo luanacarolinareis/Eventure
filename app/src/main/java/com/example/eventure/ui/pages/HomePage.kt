@@ -243,7 +243,7 @@ fun initializeOrganizerEvents() {
 }
 
 // Final list of events
-val allEvents = listOf(event1, event2, event3, event4, event5)
+val allEvents = mutableListOf(event1, event2, event3, event4, event5)
 
 @Composable
 fun HomePage(navController: NavHostController, modifier: Modifier = Modifier) {
