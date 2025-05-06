@@ -27,7 +27,7 @@ Os teus dados são armazenados com segurança e usados apenas para melhorar a tu
 
 ---
 
-## 📷 Capturas de ecrã
+## 📸 Capturas de ecrã
 
 <img src="https://github.com/user-attachments/assets/b8431099-ec34-4efa-b9e8-2d70c36790bb" alt="Screenshot 1" width="300"/>
 <img src="https://github.com/user-attachments/assets/fce91742-8b4c-4a95-9015-04a84c20d494" alt="Screenshot 5" width="300"/>
