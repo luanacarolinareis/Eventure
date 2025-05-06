@@ -1,4 +1,4 @@
-# 📱 Eventure App
+# 📱 Eventure
 
 **Descarrega já a nossa app para estares a par de todas as novidades na tua região.**
 
