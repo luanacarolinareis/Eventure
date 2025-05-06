@@ -30,10 +30,10 @@ Os teus dados são armazenados com segurança e usados apenas para melhorar a tu
 ## 📷 Capturas de ecrã
 
 <img src="https://github.com/user-attachments/assets/b8431099-ec34-4efa-b9e8-2d70c36790bb" alt="Screenshot 1" width="300"/>
+<img src="https://github.com/user-attachments/assets/fce91742-8b4c-4a95-9015-04a84c20d494" alt="Screenshot 5" width="300"/>
 <img src="https://github.com/user-attachments/assets/ea96aeab-bbb5-4928-87c5-74d733cfd98c" alt="Screenshot 2" width="300"/>
 <img src="https://github.com/user-attachments/assets/948df85a-92e2-4a6b-b8e1-8c75a87ce735" alt="Screenshot 3" width="300"/>
 <img src="https://github.com/user-attachments/assets/0730ff30-04fd-4338-a48b-cf09ef942acb" alt="Screenshot 4" width="300"/>
-<img src="https://github.com/user-attachments/assets/fce91742-8b4c-4a95-9015-04a84c20d494" alt="Screenshot 5" width="300"/>
 
 ---
 
