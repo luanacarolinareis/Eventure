@@ -53,8 +53,8 @@ Este projeto está em constante evolução. Futuras funcionalidades incluem:
 
 ## 👩‍💻 Autores
 
-Desenvolvido por [Carolina Reis](https://github.com/luanacarolinareis), Pedro Costa, Miguel Silvério, João Coelho, Gustavo Pinto, André Torga e Alexandre Fonseca.  
-Este projeto faz parte de um esforço para aproximar pessoas e experiências únicas, através da tecnologia.
+- Desenvolvido por [Carolina Reis](https://github.com/luanacarolinareis), Pedro Costa, Miguel Silvério, João Coelho, Gustavo Pinto, André Torga e Alexandre Fonseca.  
+- Este projeto faz parte de um esforço para aproximar pessoas e experiências únicas, através da tecnologia.
 
 ---
 
