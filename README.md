@@ -29,6 +29,11 @@ Os teus dados são armazenados com segurança e usados apenas para melhorar a tu
 
 ## 📷 Capturas de ecrã
 
+![Screenshot_20250506_161638_Eventure](https://github.com/user-attachments/assets/b8431099-ec34-4efa-b9e8-2d70c36790bb)
+![Screenshot_20250506_161656_Eventure](https://github.com/user-attachments/assets/ea96aeab-bbb5-4928-87c5-74d733cfd98c)
+![Screenshot_20250506_161709_Eventure](https://github.com/user-attachments/assets/948df85a-92e2-4a6b-b8e1-8c75a87ce735)
+![Screenshot_20250506_161724_Eventure](https://github.com/user-attachments/assets/0730ff30-04fd-4338-a48b-cf09ef942acb)
+![Screenshot_20250506_161753_Eventure](https://github.com/user-attachments/assets/fce91742-8b4c-4a95-9015-04a84c20d494)
 ![image](https://github.com/user-attachments/assets/aeb111ac-0932-452c-af6e-38950bdec0c1)
 
 ---
