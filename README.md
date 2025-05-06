@@ -13,9 +13,6 @@ A **Eventure** é uma aplicação Android pensada para te manter sempre a par do
 🔍 **Explora Eventos Locais**  
 Recebe recomendações de eventos com base na tua localização e preferências pessoais.
 
-🗓️ **Guarda os teus favoritos**  
-Adiciona eventos ao teu histórico para nunca te esqueceres de onde estiveste ou do que ainda queres ir!
-
 👤 **Perfis Personalizados**  
 Regista-te e cria o teu perfil com gostos e categorias favoritas para receber sugestões personalizadas.
 
